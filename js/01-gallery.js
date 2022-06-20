@@ -1,42 +1,47 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-// 1.Створення і рендер розмітки на підставі масиву даних galleryItems і наданого шаблону елемента галереї.
-
 const newGallery = document.querySelector( ".gallery" )
-galleryItems.map( ( { preview, original, description } ) => {
 
-   `<div class="gallery__item">
-  <a class="gallery__link" href="${preview}">
+const galleryItem= galleryItems.map( ( { preview, original, description } ) => {
+
+   return `<div class="gallery__item">
+    <a class="gallery__link" href="${original}">
     <img
       class="gallery__image"
-      src="small-image.jpg"
-      data-source="large-image.jpg"
-      alt="Image description"
-    />
-  </a>
-</div>`
-
-    console.log(preview)
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+      />
+      </a>
+      </div>`
 } );
 
-console.log(newGallery)
+newGallery.insertAdjacentHTML( "afterbegin", galleryItem.join( "" ) )
 
-{/* <div class="gallery__item">
-  <a class="gallery__link" href="large-image.jpg">
-    <img
-      class="gallery__image"
-      src="small-image.jpg"
-      data-source="large-image.jpg"
-      alt="Image description"
-    />
-  </a>
-</div> */}
-// 3.  вставляю модалку лайт бокс
+newGallery.addEventListener("click", handlerClick  );
 
+function handlerClick ( event ) {
 
+  event.preventDefault();
 
+  if ( event.target.nodeName !=="IMG" ) {
+    return;
+  }
 
+  const instance = basicLightbox.create(`
+    <img src="${event.target.dataset.source}" width="800" height="600">
+`)
+  console.log( event.target );
+  
+  instance.show()
 
+  window.addEventListener( "keydown", event => {
+    if ( event.code === "Escape" ) {
+      instance.close()
+    }
+  } )
 
-console.log(galleryItems);
+}
+
+//console.log(galleryItems);
