@@ -29,19 +29,22 @@ function handlerClick ( event ) {
     return;
   }
 
-  const instance = basicLightbox.create(`
-    <img src="${event.target.dataset.source}" width="800" height="600">
-`)
-  console.log( event.target );
-  
-  instance.show()
+  const instance = basicLightbox.create( `<img src="${ event.target.dataset.source }" width="800" height="600">`, {
+    
+  onShow: (instance) => {
+    window.addEventListener('keydown', onEscClick);
+  },
 
-  window.addEventListener( "keydown", event => {
-    if ( event.code === "Escape" ) {
-      instance.close()
-    }
-  } )
-
+  onClose: (instance) => {
+    window.removeEventListener('keydown', onEscClick);
+  },
+});
+instance.show()
 }
 
-//console.log(galleryItems);
+function onEscClick(evt) {
+  if (evt.key === 'Escape') {
+    instance.close();
+    return;
+  }
+}
